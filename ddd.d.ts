@@ -34,22 +34,16 @@ export const ValueObject: {
   ) => new (argsObj: zinfer<typeof schema>) => zinfer<typeof schema> & IValueObject<zinfer<typeof schema>>;
 };
 
-type TDomainObjectZodSchema = ZodObject<
-  {
-    isEqual: ZodFunction<ZodTuple<[], ZodUnknown>, ZodBoolean>;
-  },
-  "strip",
-  ZodTypeAny,
-  {
-    isEqual: (...args: unknown[]) => boolean;
-  },
-  {
-    isEqual: (...args: unknown[]) => boolean;
-  }
->;
+type TDomainObjectZodRawShape = {
+  isEqual: ZodFunction<ZodTuple<[], ZodUnknown>, ZodBoolean>;
+};
+
+type TDomainObjectZodSchema = ZodObject<TDomainObjectZodRawShape>;
 
 export const DomainObjectZodSchema: TDomainObjectZodSchema;
 
-export const EntityZodSchema: {} & TDomainObjectZodSchema;
+export const EntityZodSchema: ZodObject<
+  TDomainObjectZodRawShape & { id: ZodString }
+>;
 
-export const ValueObjectZodSchema: {} & TDomainObjectZodSchema;
+export const ValueObjectZodSchema: ZodObject<TDomainObjectZodRawShape & {}>;
