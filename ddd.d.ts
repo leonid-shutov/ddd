@@ -9,14 +9,17 @@ export type TEntityProps = { id: string };
 export interface IEntity<T> extends IDomainObject<T>, TEntityProps {}
 
 export const Entity: {
-  fromKeys: <
-    IDefault = never,
-    T extends TEntityProps & IDefault = TEntityProps & IDefault
-  >(
-    keys: (keyof T)[]
-  ) => new (args: T) => T & IEntity<T>;
+  fromKeys: <T extends TEntityProps>(keys: (keyof T)[]) => new (args: T) => T & IEntity<T>;
   fromZodSchema: <T extends ZodRawShape & { id: ZodString }>(
     schema: ZodObject<T>
-  ) => new (argsObj: zinfer<typeof schema>) => zinfer<typeof schema> &
-    IEntity<zinfer<typeof schema>>;
+  ) => new (argsObj: zinfer<typeof schema>) => zinfer<typeof schema> & IEntity<zinfer<typeof schema>>;
+};
+
+export interface IValueObject<T> extends IDomainObject<T> {}
+
+export const ValueObject: {
+  fromKeys: <T>(keys: (keyof T)[]) => new (args: T) => T & IValueObject<T>;
+  fromZodSchema: <T extends ZodRawShape>(
+    schema: ZodObject<T>
+  ) => new (argsObj: zinfer<typeof schema>) => zinfer<typeof schema> & IValueObject<zinfer<typeof schema>>;
 };
