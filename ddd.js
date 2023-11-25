@@ -1,6 +1,7 @@
 "use strict";
 
 module.exports = {
-  ...require("./lib/entity"),
-  ...require("./lib/value-object"),
+  ...require("./lib/objects/entity"),
+  ...require("./lib/objects/value-object"),
+  ...require("./lib/schemas"),
 };
