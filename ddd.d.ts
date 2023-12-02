@@ -18,23 +18,31 @@ export type TEntityProps = { id: string };
 export interface IEntity<T> extends IDomainObject<T>, TEntityProps {}
 
 export const Entity: {
-  fromKeys: <T extends TEntityProps>(
-    keys: (keyof T)[],
-  ) => new (args: T) => T & IEntity<T>;
-  fromZodSchema: <T extends ZodRawShape & { id: ZodString }>(
-    schema: ZodObject<T>,
-  ) => new (argsObj: zinfer<typeof schema>) => zinfer<typeof schema> &
-    IEntity<zinfer<typeof schema>>;
+  fromKeys: <TMetaModel extends TEntityProps>(
+    keys: (keyof TMetaModel)[],
+  ) => new <TDomainModel extends TMetaModel>(
+    args: TDomainModel,
+  ) => TDomainModel & IEntity<TDomainModel>;
+  fromZodSchema: <TMetaSchema extends ZodRawShape & { id: ZodString }>(
+    schema: ZodObject<TMetaSchema>,
+  ) => new <TDomainModel extends zinfer<typeof schema>>(
+    argsObj: TDomainModel,
+  ) => TDomainModel & IEntity<TDomainModel>;
 };
 
 export interface IValueObject<T> extends IDomainObject<T> {}
 
 export const ValueObject: {
-  fromKeys: <T>(keys: (keyof T)[]) => new (args: T) => T & IValueObject<T>;
-  fromZodSchema: <T extends ZodRawShape>(
-    schema: ZodObject<T>,
-  ) => new (argsObj: zinfer<typeof schema>) => zinfer<typeof schema> &
-    IValueObject<zinfer<typeof schema>>;
+  fromKeys: <TMetaModel>(
+    keys: (keyof TMetaModel)[],
+  ) => new <TDomainModel extends TMetaModel>(
+    args: TDomainModel,
+  ) => TDomainModel & IValueObject<TDomainModel>;
+  fromZodSchema: <TMetaSchema extends ZodRawShape>(
+    schema: ZodObject<TMetaSchema>,
+  ) => new <TDomainModel extends zinfer<typeof schema>>(
+    argsObj: TDomainModel,
+  ) => TDomainModel & IValueObject<TDomainModel>;
 };
 
 type TDomainObjectZodRawShape = {
