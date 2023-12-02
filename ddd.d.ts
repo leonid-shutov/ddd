@@ -41,16 +41,30 @@ export const ValueObject: {
     IValueObject<zinfer<typeof schema>>;
 };
 
-type TDomainObjectZodRawShape = {
-  isEqual: ZodFunction<ZodTuple<[], ZodUnknown>, ZodBoolean>;
+type TDomainObjectZodRawShape<TSchema extends ZodObject<ZodRawShape>> = {
+  isEqual: ZodFunction<ZodTuple<[TSchema], ZodUnknown>, ZodBoolean>;
 };
 
-type TDomainObjectZodSchema = ZodObject<TDomainObjectZodRawShape>;
-
-export const DomainObjectZodSchema: TDomainObjectZodSchema;
-
-export const EntityZodSchema: ZodObject<
-  TDomainObjectZodRawShape & { id: ZodString }
+type TDomainObjectZodSchema<TSchema extends ZodObject<ZodRawShape>> = ZodObject<
+  TDomainObjectZodRawShape<TSchema>
 >;
 
-export const ValueObjectZodSchema: ZodObject<TDomainObjectZodRawShape & {}>;
+export const DomainObjectZodSchema: {
+  fromModelSchema: <TShape extends ZodRawShape>(
+    modelSchema: ZodObject<TShape>,
+  ) => TDomainObjectZodSchema<ZodObject<TShape>>;
+};
+
+export const EntityZodSchema: {
+  fromModelSchema: <TShape extends ZodRawShape>(
+    modelSchema: ZodObject<TShape>,
+  ) => ZodObject<
+    TDomainObjectZodRawShape<ZodObject<TShape>> & { id: ZodString }
+  >;
+};
+
+export const ValueObjectZodSchema: {
+  fromModelSchema: <TShape extends ZodRawShape>(
+    modelSchema: ZodObject<TShape>,
+  ) => ZodObject<TDomainObjectZodRawShape<ZodObject<TShape>> & {}>;
+};
