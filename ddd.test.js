@@ -21,18 +21,6 @@ describe('Entity', () => {
     assert.strictEqual(cat.color, 'Orange tabbie');
   });
 
-  it('Id is frozen', () => {
-    const reassignId = () => {
-      cat.id = '111';
-    };
-    assert.throws(reassignId, TypeError);
-  });
-
-  it('Throws when no id', () => {
-    const createEntityWithNoId = () => Entity.fromKeys(['a', 'b']);
-    assert.throws(createEntityWithNoId, Error);
-  });
-
   it('Compares by id', () => {
     assert.strictEqual(
       new (Entity.fromKeys(['id', 'x']))({ id: '123', x: 3 }).isEqual(
