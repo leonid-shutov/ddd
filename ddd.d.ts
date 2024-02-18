@@ -13,20 +13,16 @@ export interface IDomainObject<T> {
   isEqual(comparable: T): boolean;
 }
 
-export type TMetaEntity = { id?: string };
+export type TMetaEntity = { id: string };
 
 export interface IEntity<T> extends IDomainObject<T>, TMetaEntity {}
-
-export type TEntityFactoryOptions = { generateId: boolean };
 
 export const Entity: {
   fromKeys: <TMetaModel>(
     keys: (keyof TMetaModel)[],
-    options: TEntityFactoryOptions,
   ) => new (args: TMetaModel & TMetaEntity) => TMetaModel & IEntity<TMetaModel>;
   fromZodSchema: <TMetaSchema extends ZodRawShape>(
     schema: ZodObject<TMetaSchema>,
-    options: TEntityFactoryOptions,
   ) => new (argsObj: zinfer<typeof schema> & TMetaEntity) => zinfer<
     typeof schema
   > &
